@@ -1,0 +1,42 @@
+.taskcard__title {
+  margin: 0 0 6px;
+  font-weight: bold;
+}
+
+.taskcard__desc {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.taskcard__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.taskcard__priority {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.taskcard__priority.low {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.taskcard__priority.medium {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.taskcard__priority.high {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.taskcard__user {
+  font-style: italic;
+}

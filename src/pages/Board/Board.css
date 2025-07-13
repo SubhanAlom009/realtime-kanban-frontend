@@ -1,0 +1,24 @@
+.board {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  height: calc(100vh - 60px); /* minus navbar */
+  overflow-x: auto;
+}
+
+.board__column {
+  flex: 1;
+  min-width: 300px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.board__column h3 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
+}

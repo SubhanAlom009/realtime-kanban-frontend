@@ -3,6 +3,7 @@ import "./Board.css";
 import TaskCard from "../../components/TaskCard/TaskCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import AddTaskForm from "../../components/AddTaskForm/AddTaskForm";
 
 export default function Board() {
   const API = import.meta.env.VITE_API_BASE_URL;
@@ -43,6 +44,10 @@ export default function Board() {
       {Object.entries(grouped).map(([status, tasks]) => (
         <div key={status} className="board__column">
           <h3>{status.toUpperCase()}</h3>
+          <AddTaskForm
+            column={status}
+            onTaskCreated={(newTask) => setTasks((prev) => [...prev, newTask])}
+          />
           {tasks.map((task) => (
             <TaskCard
               key={task._id}

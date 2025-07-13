@@ -1,30 +1,52 @@
+.taskcard {
+  background-color: #ffffff;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  transition: all 0.2s ease;
+  border-left: 4px solid #ccc;
+  cursor: default;
+}
+
+.taskcard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .taskcard__title {
+  font-size: 1rem;
+  font-weight: 600;
   margin: 0 0 6px;
-  font-weight: bold;
+  color: #222;
 }
 
 .taskcard__desc {
-  font-size: 0.9rem;
-  margin-bottom: 8px;
-  color: #444;
+  font-size: 0.88rem;
+  color: #555;
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .taskcard__meta {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
-  color: #666;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #777;
 }
 
 .taskcard__priority {
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 0.75rem;
 }
 
 .taskcard__priority.low {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #e7f7ed;
+  color: #218838;
 }
 
 .taskcard__priority.medium {
@@ -34,9 +56,11 @@
 
 .taskcard__priority.high {
   background-color: #f8d7da;
-  color: #721c24;
+  color: #c82333;
 }
 
 .taskcard__user {
   font-style: italic;
+  font-size: 0.76rem;
+  opacity: 0.9;
 }

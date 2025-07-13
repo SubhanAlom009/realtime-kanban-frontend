@@ -3,6 +3,7 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -18,9 +19,12 @@ export default function Navbar() {
 
         <div className="navbar__links">
           {token ? (
-            <button className="navbar__btn" onClick={handleLogout}>
-              Logout
-            </button>
+            <div className="navbar__user">
+              <span className="navbar__greet">Hi, {username}</span>
+              <button className="navbar__btn" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
           ) : (
             <>
               <Link to="/login" className="navbar__btn">

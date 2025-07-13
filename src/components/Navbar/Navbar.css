@@ -43,3 +43,18 @@
   background-color: #f1f1f1;
   border-color: #555;
 }
+
+.navbar__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar__greet {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+  background-color: #f1f1f1;
+  padding: 6px 12px;
+  border-radius: 20px;
+}

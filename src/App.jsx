@@ -1,5 +1,11 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Navbar from "./components/Navbar/Navbar";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import Board from "./pages/Board/Board";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 function App() {
   return (
     <>
@@ -10,7 +16,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/brain"
+            path="/board"
             element={
               <ProtectedRoute>
                 <Board />

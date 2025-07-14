@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import "./Board.css";
 import TaskCard from "../../components/TaskCard/TaskCard";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import EditTaskModal from "../../components/EditTaskModal/EditTaskModal";
 import { DndContext } from "@dnd-kit/core";
 import DroppableColumn from "../../components/DroppableColumn/DroppableColumn";
+import { SocketContext } from "../../context/SocketContext";
 
 export default function Board() {
   const API = import.meta.env.VITE_API_BASE_URL;
@@ -100,6 +101,35 @@ export default function Board() {
       console.error("DnD update failed:", err);
     }
   };
+
+  const { socket } = useContext(SocketContext);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    // New task created by others
+    socket.on("task_created", (task) => {
+      setTasks((prev) => [...prev, task]);
+    });
+
+    // Task updated (e.g. dragged or edited)
+    socket.on("task_updated", (updatedTask) => {
+      setTasks((prev) =>
+        prev.map((t) => (t._id === updatedTask._id ? updatedTask : t))
+      );
+    });
+
+    // Task deleted
+    socket.on("task_deleted", (taskId) => {
+      setTasks((prev) => prev.filter((t) => t._id !== taskId));
+    });
+
+    return () => {
+      socket.off("task_created");
+      socket.off("task_updated");
+      socket.off("task_deleted");
+    };
+  }, [socket]);
 
   return (
     <DndContext onDragEnd={handleDragEnd}>

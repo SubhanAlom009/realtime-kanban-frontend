@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "./AddTaskForm.css";
 import { toast } from "react-toastify";
 
-export default function AddTaskForm({ column, onTaskCreated }) {
+export default function AddTaskForm({ column }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -31,7 +31,6 @@ export default function AddTaskForm({ column, onTaskCreated }) {
       );
       toast.success("Task created successfully!");
       if (response.status === 201 || response.status === 200) {
-        onTaskCreated(response.data.savedTask);
         setTitle("");
         setDesc("");
         setPriority("low");

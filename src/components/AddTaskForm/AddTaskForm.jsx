@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import "./AddTaskForm.css";
+import { toast } from "react-toastify";
 
 export default function AddTaskForm({ column, onTaskCreated }) {
   const [open, setOpen] = useState(false);
@@ -28,8 +29,7 @@ export default function AddTaskForm({ column, onTaskCreated }) {
           },
         }
       );
-      console.log("Newly created task:", response.data);
-
+      toast.success("Task created successfully!");
       if (response.status === 201 || response.status === 200) {
         onTaskCreated(response.data.savedTask);
         setTitle("");

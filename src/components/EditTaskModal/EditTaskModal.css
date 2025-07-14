@@ -1,0 +1,22 @@
+.edit__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit__form input,
+.edit__form textarea,
+.edit__form select {
+  padding: 10px;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  width: 100%;
+}
+
+.edit__form input:focus,
+.edit__form textarea:focus,
+.edit__form select:focus {
+  border-color: #6c63ff;
+}

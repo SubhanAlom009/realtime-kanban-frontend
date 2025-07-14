@@ -6,7 +6,8 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
   transition: all 0.2s ease;
   border-left: 4px solid #ccc;
-  cursor: default;
+  cursor: grab;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
 .taskcard:hover {
@@ -63,4 +64,39 @@
   font-style: italic;
   font-size: 0.76rem;
   opacity: 0.9;
+}
+
+.taskcard__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.taskcard__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.taskcard__edit,
+.taskcard__delete {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: #444;
+}
+
+.taskcard__edit:hover {
+  transform: scale(1.1);
+  color: #0d9488; /* teal-600 vibe */
+}
+
+.taskcard__delete:hover {
+  transform: scale(1.1);
+  color: #dc2626;
+}
+
+.taskcard:active {
+  cursor: grabbing;
 }

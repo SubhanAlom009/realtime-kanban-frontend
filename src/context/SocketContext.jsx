@@ -12,7 +12,7 @@ const SocketProvider = ({ children }) => {
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
       autoConnect: true,
-      withCredentials: true,
+      withCredentials: false,
     });
 
     setSocket(newSocket);

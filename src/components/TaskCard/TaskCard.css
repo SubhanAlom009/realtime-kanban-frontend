@@ -100,3 +100,21 @@
 .taskcard:active {
   cursor: grabbing;
 }
+
+.taskcard__top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.taskcard__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.taskcard__drag {
+  cursor: grab;
+  font-size: 1.2rem;
+  user-select: none;
+  color: #555;
+}

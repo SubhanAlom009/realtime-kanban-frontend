@@ -73,6 +73,13 @@
   background-color: #ddd;
 }
 
+.addtask__assign {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  display: flex;
+  gap: 1rem;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

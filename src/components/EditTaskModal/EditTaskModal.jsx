@@ -8,6 +8,7 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
   const [priority, setPriority] = useState("low");
   const [users, setUsers] = useState([]);
   const [assignedTo, setAssignedTo] = useState("");
+  const [autoAssign, setAutoAssign] = useState(true);
 
   const API = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem("token");
@@ -96,17 +97,42 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
-          <select
-            value={assignedTo}
-            onChange={(e) => setAssignedTo(e.target.value)}
-          >
-            <option value="">Unassigned</option>
-            {users.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.username} ({user.email})
-              </option>
-            ))}
-          </select>
+          <div className="addtask__assign">
+            <label>
+              <input
+                type="radio"
+                name="assignMode"
+                value="auto"
+                checked={autoAssign}
+                onChange={() => setAutoAssign(true)}
+              />
+              Smart Assign
+            </label>
+            <label style={{ marginLeft: "10px" }}>
+              <input
+                type="radio"
+                name="assignMode"
+                value="manual"
+                checked={!autoAssign}
+                onChange={() => setAutoAssign(false)}
+              />
+              Manual Assign
+            </label>
+          </div>
+
+          {!autoAssign && (
+            <select
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)}
+            >
+              <option value="">Select a user</option>
+              {users.map((user) => (
+                <option key={user._id} value={user._id}>
+                  {user.username} ({user.email})
+                </option>
+              ))}
+            </select>
+          )}
 
           <div className="modal__actions">
             <button type="button" className="modal__cancel" onClick={onClose}>

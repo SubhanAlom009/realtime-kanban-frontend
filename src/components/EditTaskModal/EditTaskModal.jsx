@@ -6,6 +6,8 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [priority, setPriority] = useState("low");
+  const [users, setUsers] = useState([]);
+  const [assignedTo, setAssignedTo] = useState("");
 
   const API = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem("token");
@@ -15,6 +17,11 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
       setTitle(task.title || "");
       setDesc(task.description || "");
       setPriority(task.priority || "low");
+      setAssignedTo(
+        typeof task.assignedTo === "object"
+          ? task.assignedTo._id
+          : task.assignedTo || ""
+      );
     }
   }, [task]);
 
@@ -30,6 +37,7 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
           title,
           description: desc,
           priority,
+          assignedTo: assignedTo || null,
         },
         {
           headers: {
@@ -46,6 +54,20 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
       console.error("Update failed:", err.response?.data || err.message);
     }
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(`${API}/api/auth/all`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUsers(res.data);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      }
+    };
+    fetchUsers();
+  }, [API, token]);
 
   if (!isOpen) return null;
 
@@ -74,6 +96,18 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
             <option value="medium">Medium</option>
             <option value="high">High</option>
           </select>
+          <select
+            value={assignedTo}
+            onChange={(e) => setAssignedTo(e.target.value)}
+          >
+            <option value="">Unassigned</option>
+            {users.map((user) => (
+              <option key={user._id} value={user._id}>
+                {user.username} ({user.email})
+              </option>
+            ))}
+          </select>
+
           <div className="modal__actions">
             <button type="button" className="modal__cancel" onClick={onClose}>
               Cancel

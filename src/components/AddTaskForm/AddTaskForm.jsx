@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AddTaskForm.css";
 import { toast } from "react-toastify";
 
@@ -8,6 +8,8 @@ export default function AddTaskForm({ column }) {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [priority, setPriority] = useState("low");
+  const [users, setUsers] = useState([]);
+  const [assignedTo, setAssignedTo] = useState("");
 
   const token = localStorage.getItem("token");
   const API = import.meta.env.VITE_API_BASE_URL;
@@ -22,6 +24,7 @@ export default function AddTaskForm({ column }) {
           description: desc,
           priority,
           status: column,
+          assignedTo: assignedTo || null,
         },
         {
           headers: {
@@ -40,6 +43,20 @@ export default function AddTaskForm({ column }) {
       console.error("Error creating task:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(`${API}/api/auth/all`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUsers(res.data);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      }
+    };
+    fetchUsers();
+  }, [API, token]);
 
   return open ? (
     <form className="addtask" onSubmit={handleSubmit}>
@@ -60,6 +77,18 @@ export default function AddTaskForm({ column }) {
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
+      <select
+        value={assignedTo}
+        onChange={(e) => setAssignedTo(e.target.value)}
+      >
+        <option value="">Unassigned</option>
+        {users.map((user) => (
+          <option key={user._id} value={user._id}>
+            {user.username} ({user.email})
+          </option>
+        ))}
+      </select>
+
       <div className="addtask__btns">
         <button type="submit">Add</button>
         <button type="button" onClick={() => setOpen(false)}>

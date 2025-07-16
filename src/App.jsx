@@ -6,11 +6,13 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Board from "./pages/Board/Board";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import "./App.css";
+
 function App() {
   return (
-    <>
-      <div>
-        <Navbar />
+    <div className="app-container">
+      <Navbar />
+      <div className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -25,7 +27,7 @@ function App() {
           />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 

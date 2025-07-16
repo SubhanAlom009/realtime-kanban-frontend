@@ -1,0 +1,41 @@
+/* Global styles to fix layout issues */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Fix for main content area to account for fixed navbar */
+.main-content {
+  flex: 1;
+  padding-top: 60px; /* Equal to navbar height */
+  width: 100%;
+  min-height: calc(100vh - 60px);
+}

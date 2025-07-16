@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+// Import the same fonts used in Navbar for consistency
+const fontLink = document.createElement("link");
+fontLink.href =
+  "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,6 +18,13 @@ export default function Login() {
 
   const API = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      navigate("/board"); // Redirect if already logged in
+    }
+  }, [token, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,7 +66,9 @@ export default function Login() {
   return (
     <div className="login">
       <div className="login__box">
-        <h2 className="login__title">Login to CollabBoard</h2>
+        <h2 className="login__title">
+          Welcome to <span className="accent-text">CollabBoard</span>
+        </h2>
 
         <form className="login__form" onSubmit={handleSubmit}>
           <div className="login__field">
@@ -76,7 +92,7 @@ export default function Login() {
           </div>
 
           <button type="submit" className="login__btn">
-            Login
+            Sign In
           </button>
         </form>
 

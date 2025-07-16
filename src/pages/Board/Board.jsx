@@ -104,6 +104,13 @@ export default function Board() {
     return grouped;
   }, [tasks]);
 
+  // Status titles mapping
+  const statusTitles = {
+    todo: "TO DO",
+    "in-progress": "IN PROGRESS",
+    done: "DONE",
+  };
+
   // Listen to socket events
   useEffect(() => {
     if (!socket) return;
@@ -143,55 +150,70 @@ export default function Board() {
       <DndContext onDragEnd={handleDragEnd}>
         <div className="board__main">
           <div className="board">
-            {Object.entries(grouped).map(([status, tasks]) => (
-              <DroppableColumn id={status} key={status}>
-                <h3>{status.toUpperCase()}</h3>
-                <AddTaskForm
-                  column={status}
-                  onTaskCreated={(newTask) =>
-                    setTasks((prev) => [...prev, newTask])
-                  }
-                />
-                {tasks.map((task) => (
-                  <TaskCard
-                    key={task._id}
-                    _id={task._id}
-                    title={task.title}
-                    description={task.description}
-                    priority={task.priority}
-                    assignedTo={task.assignedTo}
-                    status={task.status}
-                    onDelete={() => handleAskDelete(task._id)}
-                    onEdit={(taskObj) => {
-                      setTaskToEdit(taskObj);
-                      setIsEditModalOpen(true);
-                    }}
-                  />
-                ))}
-              </DroppableColumn>
+            {Object.entries(grouped).map(([status, statusTasks]) => (
+              <div className="board__column-wrapper" key={status}>
+                <div className="column__header">
+                  <div className="column__title">
+                    {statusTitles[status]}
+                    <span className="column__count">{statusTasks.length}</span>
+                  </div>
+                </div>
+
+                <DroppableColumn id={status}>
+                  <div>
+                    <AddTaskForm
+                      column={status}
+                      onTaskCreated={(newTask) =>
+                        setTasks((prev) => [...prev, newTask])
+                      }
+                    />
+                  </div>
+
+                  <div className="column__tasks">
+                    {statusTasks.map((task) => (
+                      <TaskCard
+                        key={task._id}
+                        _id={task._id}
+                        title={task.title}
+                        description={task.description}
+                        priority={task.priority}
+                        assignedTo={task.assignedTo}
+                        status={task.status}
+                        onDelete={() => handleAskDelete(task._id)}
+                        onEdit={(taskObj) => {
+                          setTaskToEdit(taskObj);
+                          setIsEditModalOpen(true);
+                        }}
+                      />
+                    ))}
+                  </div>
+                </DroppableColumn>
+              </div>
             ))}
-            <ConfirmModal
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              onConfirm={confirmDelete}
-              message="Do you really want to delete this task?"
-            />
-            <EditTaskModal
-              isOpen={isEditModalOpen}
-              onClose={() => setIsEditModalOpen(false)}
-              task={taskToEdit}
-              onUpdate={(updatedTask) => {
-                setTasks((prev) =>
-                  prev.map((task) =>
-                    task._id === updatedTask._id ? updatedTask : task
-                  )
-                );
-              }}
-            />
           </div>
+
+          <ConfirmModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onConfirm={confirmDelete}
+            message="Do you really want to delete this task?"
+          />
+
+          <EditTaskModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            task={taskToEdit}
+            onUpdate={(updatedTask) => {
+              setTasks((prev) =>
+                prev.map((task) =>
+                  task._id === updatedTask._id ? updatedTask : task
+                )
+              );
+            }}
+          />
         </div>
-        <ActionLog />
       </DndContext>
+      <ActionLog />
     </div>
   );
 }

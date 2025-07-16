@@ -3,30 +3,42 @@
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 60px);
-  background-color: #f4f6f8;
+  background: linear-gradient(135deg, #fcf8ff 0%, #f9f0ff 100%);
   padding: 20px;
+  font-family: "Poppins", sans-serif;
 }
 
 .register__box {
-  background: white;
-  padding: 40px 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 40px 35px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(185, 131, 255, 0.12);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  border: 1px solid rgba(247, 178, 255, 0.15);
 }
 
 .register__title {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+  font-size: 1.9rem;
+  margin-bottom: 25px;
   color: #333;
   text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.accent-text {
+  color: #b983ff;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
 }
 
 .register__form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
 .register__field {
@@ -38,44 +50,76 @@
   margin-bottom: 6px;
   font-weight: 500;
   color: #555;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
 }
 
 .register__field input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px 14px;
+  border: 1px solid rgba(185, 131, 255, 0.3);
+  border-radius: 10px;
   font-size: 1rem;
   outline: none;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.25s ease;
 }
 
 .register__field input:focus {
-  border-color: #333;
+  border-color: #b983ff;
+  box-shadow: 0 0 0 3px rgba(185, 131, 255, 0.15);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .register__btn {
   padding: 12px;
   border: none;
-  background-color: #333;
+  background: linear-gradient(90deg, #b983ff 0%, #cc99ff 100%);
   color: white;
   font-size: 1rem;
-  border-radius: 5px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(185, 131, 255, 0.2);
+  margin-top: 5px;
 }
 
 .register__btn:hover {
-  background-color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(185, 131, 255, 0.3);
 }
 
 .register__footer {
   text-align: center;
-  margin-top: 15px;
-  font-size: 0.9rem;
-  color: #555;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: #666;
 }
 
 .register__footer a {
-  color: #000;
-  font-weight: 500;
+  color: #b983ff;
+  font-weight: 600;
   text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.register__footer a:hover {
+  text-decoration: underline;
+  color: #9b4dff;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .register__box {
+    padding: 30px 20px;
+  }
+
+  .register__title {
+    font-size: 1.7rem;
+  }
+
+  .register__field input {
+    padding: 10px 12px;
+  }
 }

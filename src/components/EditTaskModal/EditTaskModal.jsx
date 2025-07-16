@@ -67,7 +67,7 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
           description: desc,
           priority,
           assignedTo: autoAssign ? null : assignedTo,
-          lastModified, // ✅ Pass this for conflict detection
+          lastModified,
         },
         {
           headers: {
@@ -82,7 +82,6 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
       }
     } catch (err) {
       if (err.response?.status === 409) {
-        // 🧠 Conflict detected
         setConflict({
           server: err.response.data.currentTask,
           client: err.response.data.yourAttempt,
@@ -110,76 +109,109 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal__overlay">
-      <div className="modal">
-        <h3>Edit Task</h3>
+    <div className="edit-modal__overlay" onClick={onClose}>
+      <div className="edit-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="edit-modal__header">
+          <h3>Edit Task</h3>
+          <button className="edit-modal__close" onClick={onClose}>
+            ×
+          </button>
+        </div>
+
         <form className="edit__form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-          <textarea
-            placeholder="Description"
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-          />
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-          <div className="addtask__assign">
-            <label>
-              <input
-                type="radio"
-                name="assignMode"
-                value="auto"
-                checked={autoAssign}
-                onChange={() => setAutoAssign(true)}
-              />
-              Smart Assign
-            </label>
-            <label style={{ marginLeft: "10px" }}>
-              <input
-                type="radio"
-                name="assignMode"
-                value="manual"
-                checked={!autoAssign}
-                onChange={() => setAutoAssign(false)}
-              />
-              Manual Assign
-            </label>
+          <div className="form-group">
+            <label htmlFor="taskTitle">Title</label>
+            <input
+              id="taskTitle"
+              type="text"
+              placeholder="Enter task title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="taskDesc">Description</label>
+            <textarea
+              id="taskDesc"
+              placeholder="Enter task description"
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="taskPriority">Priority</label>
+            <select
+              id="taskPriority"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+            >
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+          </div>
+
+          <div className="form-group assignment-options">
+            <p className="assignment-label">Assignment Method</p>
+            <div className="assignment-radios">
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="assignMode"
+                  value="auto"
+                  checked={autoAssign}
+                  onChange={() => setAutoAssign(true)}
+                />
+                <span className="radio-text">Smart Assign</span>
+              </label>
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="assignMode"
+                  value="manual"
+                  checked={!autoAssign}
+                  onChange={() => setAutoAssign(false)}
+                />
+                <span className="radio-text">Manual Assign</span>
+              </label>
+            </div>
           </div>
 
           {!autoAssign && (
-            <select
-              value={assignedTo}
-              onChange={(e) => setAssignedTo(e.target.value)}
-            >
-              <option value="">Select a user</option>
-              {users.map((user) => (
-                <option key={user._id} value={user._id}>
-                  {user.username} ({user.email})
-                </option>
-              ))}
-            </select>
+            <div className="form-group">
+              <label htmlFor="assigneeSelect">Assign To</label>
+              <select
+                id="assigneeSelect"
+                value={assignedTo}
+                onChange={(e) => setAssignedTo(e.target.value)}
+              >
+                <option value="">Select team member</option>
+                {users.map((user) => (
+                  <option key={user._id} value={user._id}>
+                    {user.username} ({user.email})
+                  </option>
+                ))}
+              </select>
+            </div>
           )}
 
-          <div className="modal__actions">
-            <button type="button" className="modal__cancel" onClick={onClose}>
+          <div className="edit-modal__actions">
+            <button
+              type="button"
+              className="edit-modal__cancel"
+              onClick={onClose}
+            >
               Cancel
             </button>
-            <button type="submit" className="modal__confirm">
+            <button type="submit" className="edit-modal__save">
               Save Changes
             </button>
           </div>
         </form>
+
         {conflict && (
           <ConflictPrompt
             conflict={conflict}

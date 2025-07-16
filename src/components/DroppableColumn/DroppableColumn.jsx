@@ -7,9 +7,10 @@ export default function DroppableColumn({ id, children }) {
     <div
       ref={setNodeRef}
       className="board__column"
+      data-id={id}
+      data-is-over={isOver}
       style={{
-        backgroundColor: isOver ? "#f1f1f1" : "#fff",
-        transition: "background-color 0.2s ease",
+        transition: "all 0.3s ease",
       }}
     >
       {children}

@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import "./AddTaskForm.css";
 import { toast } from "react-toastify";
 
-export default function AddTaskForm({ column }) {
-  const [open, setOpen] = useState(false);
+export default function AddTaskForm({ column, onTaskCreated }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [priority, setPriority] = useState("low");
@@ -35,13 +35,17 @@ export default function AddTaskForm({ column }) {
       );
       toast.success("Task created successfully!");
       if (response.status === 201 || response.status === 200) {
+        // Pass the new task to the parent component
+        onTaskCreated(response.data);
+        // Reset form
         setTitle("");
         setDesc("");
         setPriority("low");
-        setOpen(false);
+        setIsModalOpen(false);
       }
     } catch (error) {
       console.error("Error creating task:", error);
+      toast.error("Failed to create task");
     }
   };
 
@@ -59,72 +63,103 @@ export default function AddTaskForm({ column }) {
     fetchUsers();
   }, [API, token]);
 
-  return open ? (
-    <form className="addtask" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
-      <textarea
-        placeholder="Description"
-        value={desc}
-        onChange={(e) => setDesc(e.target.value)}
-      />
-      <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-      <div className="addtask__assign">
-        <label>
-          <input
-            type="radio"
-            name="assignMode"
-            value="auto"
-            checked={autoAssign}
-            onChange={() => setAutoAssign(true)}
-          />
-          Smart Assign
-        </label>
-        <label style={{ marginLeft: "10px" }}>
-          <input
-            type="radio"
-            name="assignMode"
-            value="manual"
-            checked={!autoAssign}
-            onChange={() => setAutoAssign(false)}
-          />
-          Manual Assign
-        </label>
-      </div>
+  // Close modal when clicking outside
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains("addtask-overlay")) {
+      setIsModalOpen(false);
+    }
+  };
 
-      {!autoAssign && (
-        <select
-          value={assignedTo}
-          onChange={(e) => setAssignedTo(e.target.value)}
-        >
-          <option value="">Select a user</option>
-          {users.map((user) => (
-            <option key={user._id} value={user._id}>
-              {user.username} ({user.email})
-            </option>
-          ))}
-        </select>
+  return (
+    <>
+      {/* Add Task Button */}
+      <button className="addtask__toggle" onClick={() => setIsModalOpen(true)}>
+        Add Task
+      </button>
+
+      {/* Modal Overlay */}
+      {isModalOpen && (
+        <div className="addtask-overlay" onClick={handleOverlayClick}>
+          <div className="addtask-modal">
+            <form className="addtask" onSubmit={handleSubmit}>
+              <div className="addtask__header">
+                <h3>Add Task to {column.toUpperCase()}</h3>
+                <button
+                  type="button"
+                  className="addtask__close"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  ×
+                </button>
+              </div>
+
+              <input
+                type="text"
+                placeholder="Task Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+              <textarea
+                placeholder="Task Description"
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
+              />
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+              >
+                <option value="low">Low Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="high">High Priority</option>
+              </select>
+              <div className="addtask__assign">
+                <label>
+                  <input
+                    type="radio"
+                    name="assignMode"
+                    value="auto"
+                    checked={autoAssign}
+                    onChange={() => setAutoAssign(true)}
+                  />
+                  <span>Smart Assign</span>
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="assignMode"
+                    value="manual"
+                    checked={!autoAssign}
+                    onChange={() => setAutoAssign(false)}
+                  />
+                  <span>Manual Assign</span>
+                </label>
+              </div>
+
+              {!autoAssign && (
+                <select
+                  value={assignedTo}
+                  onChange={(e) => setAssignedTo(e.target.value)}
+                >
+                  <option value="">Select team member to assign</option>
+                  {users.map((user) => (
+                    <option key={user._id} value={user._id}>
+                      {user.username} ({user.email})
+                    </option>
+                  ))}
+                </select>
+              )}
+
+              <div className="addtask__btns">
+                <button type="submit">Create Task</button>
+                <button type="button" onClick={() => setIsModalOpen(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
-
-      <div className="addtask__btns">
-        <button type="submit">Add</button>
-        <button type="button" onClick={() => setOpen(false)}>
-          Cancel
-        </button>
-      </div>
-    </form>
-  ) : (
-    <button className="addtask__toggle" onClick={() => setOpen(true)}>
-      + Add Task
-    </button>
+    </>
   );
 }

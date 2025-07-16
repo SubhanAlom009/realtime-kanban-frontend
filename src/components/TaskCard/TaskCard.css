@@ -1,126 +1,234 @@
 .taskcard {
   background-color: #ffffff;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
-  transition: all 0.2s ease;
-  border-left: 4px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
   cursor: grab;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+  border: 1px solid rgba(185, 131, 255, 0.08);
+  min-height: 155px;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
 }
 
 .taskcard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.taskcard__title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 6px;
-  color: #222;
-}
-
-.taskcard__desc {
-  font-size: 0.88rem;
-  color: #555;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.taskcard__meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-  color: #777;
-}
-
-.taskcard__priority {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-weight: 500;
-  text-transform: capitalize;
-  font-size: 0.75rem;
-}
-
-.taskcard__priority.low {
-  background-color: #e7f7ed;
-  color: #218838;
-}
-
-.taskcard__priority.medium {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.taskcard__priority.high {
-  background-color: #f8d7da;
-  color: #c82333;
-}
-
-.taskcard__user {
-  font-style: italic;
-  font-size: 0.76rem;
-  opacity: 0.9;
-}
-
-.taskcard__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.taskcard__actions {
-  display: flex;
-  gap: 6px;
-}
-
-.taskcard__edit,
-.taskcard__delete {
-  background: transparent;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  color: #444;
-}
-
-.taskcard__edit:hover {
-  transform: scale(1.1);
-  color: #0d9488; /* teal-600 vibe */
-}
-
-.taskcard__delete:hover {
-  transform: scale(1.1);
-  color: #dc2626;
+  box-shadow: 0 6px 15px rgba(108, 99, 255, 0.12);
+  border-color: rgba(185, 131, 255, 0.2);
 }
 
 .taskcard:active {
   cursor: grabbing;
 }
 
-.taskcard__top {
-  display: flex;
-  justify-content: flex-end;
+.taskcard.is-dragging {
+  opacity: 0.9;
+  box-shadow: 0 15px 30px rgba(108, 99, 255, 0.2);
+  transform: scale(1.03);
+  animation: pulse 1.5s infinite;
+  cursor: grabbing;
+  background-color: #fcfaff;
+  border-color: rgba(185, 131, 255, 0.4);
 }
 
-.taskcard__actions {
+@keyframes pulse {
+  0% {
+    box-shadow: 0 10px 25px rgba(108, 99, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 15px 35px rgba(108, 99, 255, 0.3);
+  }
+  100% {
+    box-shadow: 0 10px 25px rgba(108, 99, 255, 0.2);
+  }
+}
+
+.taskcard__content {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskcard[data-priority="high"] {
+  border-top: 3px solid #ff5757;
+}
+
+.taskcard[data-priority="medium"] {
+  border-top: 3px solid #ffa726;
+}
+
+.taskcard[data-priority="low"] {
+  border-top: 3px solid #66bb6a;
+}
+
+/* New header section with actions */
+.taskcard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.taskcard__header-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.taskcard:hover .taskcard__header-actions {
+  opacity: 1;
+}
+
+.taskcard.is-dragging .taskcard__header-actions {
+  opacity: 0;
+}
+
+.taskcard__title {
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.4;
+  flex: 1;
+  padding-right: 8px;
+}
+
+.taskcard__desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 3; */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.taskcard__details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding-top: 10px;
+}
+
+.taskcard__priority {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.taskcard__priority.high {
+  background-color: #ffebee;
+  color: #e53935;
+}
+
+.taskcard__priority.medium {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.taskcard__priority.low {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+
+/* Action buttons styling */
+.taskcard__edit,
+.taskcard__delete,
+.taskcard__drag {
+  background: transparent;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #888;
+}
+
+.taskcard__edit {
+  background-color: rgba(108, 99, 255, 0.08);
+  color: #6c63ff;
+}
+
+.taskcard__edit:hover {
+  background-color: rgba(108, 99, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.taskcard__delete {
+  background-color: rgba(255, 99, 99, 0.08);
+  color: #ff6363;
+}
+
+.taskcard__delete:hover {
+  background-color: rgba(255, 99, 99, 0.15);
+  transform: translateY(-1px);
+}
+
+.taskcard__drag {
+  background-color: rgba(0, 0, 0, 0.04);
+  cursor: grab;
+}
+
+.taskcard__drag:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.taskcard__user {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.taskcard__drag {
-  cursor: grab;
-  font-size: 1.2rem;
-  user-select: none;
-  color: #555;
+.taskcard__user-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(108, 99, 255, 0.1);
+  color: #6c63ff;
 }
 
-.taskcard__lock {
-  opacity: 0.6;
-  font-size: 1rem;
-  margin-left: 6px;
+.taskcard__username {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+/* Animation for card insertion */
+@keyframes cardInsert {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.taskcard {
+  animation: cardInsert 0.3s ease forwards;
 }

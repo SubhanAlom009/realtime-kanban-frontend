@@ -1,89 +1,268 @@
+/* Modal Overlay */
+.addtask-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.addtask-modal {
+  width: 90%;
+  max-width: 500px;
+  animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .addtask {
   background-color: #ffffff;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(108, 99, 255, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 16px;
-  animation: fadeIn 0.2s ease-in;
+  gap: 14px;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.addtask::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #b983ff, #f7b2ff, #ffc2e9);
+  opacity: 0.8;
+}
+
+.addtask__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.addtask__header h3 {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+.addtask__close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.addtask__close:hover {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
 }
 
 .addtask input,
 .addtask textarea,
 .addtask select {
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.85rem;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(185, 131, 255, 0.15);
+  font-size: 0.95rem;
   width: 100%;
   outline: none;
-  transition: border 0.2s ease;
+  transition: all 0.3s ease;
+  background-color: #fbfaff;
+  color: #444;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .addtask input:focus,
 .addtask textarea:focus,
 .addtask select:focus {
-  border-color: #6c63ff;
+  border-color: #b983ff;
+  box-shadow: 0 0 0 3px rgba(185, 131, 255, 0.15);
+  background-color: #fff;
+  transform: translateY(-1px);
+}
+
+.addtask input::placeholder,
+.addtask textarea::placeholder {
+  color: #aaa;
+  font-weight: 400;
 }
 
 .addtask textarea {
   resize: vertical;
-  min-height: 60px;
+  min-height: 90px;
   font-family: inherit;
+  line-height: 1.6;
 }
 
 .addtask select {
   cursor: pointer;
-  background-color: #f9f9f9;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23b983ff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 12px;
+  padding-right: 40px;
+  font-weight: 500;
+}
+
+.addtask select option {
+  font-weight: normal;
+  padding: 8px;
 }
 
 .addtask__btns {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 6px;
 }
 
 .addtask__btns button {
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  border-radius: 5px;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  border-radius: 30px;
   border: none;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .addtask__btns button[type="submit"] {
-  background-color: #6c63ff;
+  background: linear-gradient(135deg, #b983ff 0%, #f7b2ff 100%);
   color: white;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.addtask__btns button[type="submit"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f7b2ff 0%, #b983ff 100%);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+.addtask__btns button[type="submit"]:hover::before {
+  opacity: 1;
 }
 
 .addtask__btns button[type="submit"]:hover {
-  background-color: #554ef2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(185, 131, 255, 0.35);
 }
 
 .addtask__btns button[type="button"] {
-  background-color: #eee;
-  color: #333;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #777;
+  border: 1px solid rgba(185, 131, 255, 0.15);
+  backdrop-filter: blur(10px);
 }
 
 .addtask__btns button[type="button"]:hover {
-  background-color: #ddd;
+  background-color: #f5f1ff;
+  color: #b983ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(185, 131, 255, 0.15);
 }
 
 .addtask__assign {
   margin: 8px 0;
   font-size: 0.9rem;
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
+  padding: 14px;
+  background-color: #fbfaff;
+  border-radius: 12px;
+  border: 1px solid rgba(185, 131, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.addtask__assign::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(185, 131, 255, 0.3),
+    transparent
+  );
+}
+
+.addtask__assign label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.addtask__assign label:hover {
+  background-color: rgba(185, 131, 255, 0.1);
+  color: #b983ff;
+}
+
+.addtask__assign input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #b983ff;
+  cursor: pointer;
+}
+
+.addtask__assign input[type="radio"]:checked + span {
+  color: #b983ff;
+  font-weight: 600;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
   }
   to {
     opacity: 1;
@@ -93,22 +272,79 @@
 
 .addtask__toggle {
   width: 100%;
-  background-color: #f4f4f4;
-  border: 1px dashed #aaa;
-  color: #333;
-  padding: 10px 14px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  background: linear-gradient(
+    135deg,
+    rgba(185, 131, 255, 0.05) 0%,
+    rgba(247, 178, 255, 0.08) 100%
+  );
+  border: 2px dashed rgba(185, 131, 255, 0.3);
+  color: #b983ff;
+  padding: 14px 20px;
+  margin-bottom: 15px;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 600;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  /* Fix for the button height issue when scrollbar appears */
+  min-height: 50px;
+  flex-shrink: 0;
+}
+
+.addtask__toggle::before {
+  content: "+";
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 0.8;
+  margin-right: 2px;
+}
+
+.addtask__toggle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(185, 131, 255, 0.1) 0%,
+    rgba(247, 178, 255, 0.1) 100%
+  );
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s ease;
 }
 
 .addtask__toggle:hover {
-  background-color: #e9e9e9;
-  border-color: #777;
-  color: #000;
-  transform: translateY(-1px);
+  background: transparent;
+  border-color: rgba(185, 131, 255, 0.6);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(185, 131, 255, 0.2);
+  color: #b06fff;
+}
+
+.addtask__toggle:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .addtask-modal {
+    width: 95%;
+  }
+
+  .addtask__assign {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

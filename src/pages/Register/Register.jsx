@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./Register.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+// Import the same fonts used in Navbar for consistency
+const fontLink = document.createElement("link");
+fontLink.href =
+  "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -13,6 +20,13 @@ export default function Register() {
 
   const API = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      navigate("/board"); // Redirect if already logged in
+    }
+  }, [token, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,7 +75,9 @@ export default function Register() {
   return (
     <div className="register">
       <div className="register__box">
-        <h2 className="register__title">Create an Account</h2>
+        <h2 className="register__title">
+          Join <span className="accent-text">CollabBoard</span>
+        </h2>
 
         <form className="register__form" onSubmit={handleSubmit}>
           <div className="register__field">
@@ -95,12 +111,12 @@ export default function Register() {
           </div>
 
           <button type="submit" className="register__btn">
-            Register
+            Create Account
           </button>
         </form>
 
         <p className="register__footer">
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to="/login">Sign In</Link>
         </p>
       </div>
     </div>

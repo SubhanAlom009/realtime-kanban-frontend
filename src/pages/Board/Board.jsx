@@ -160,7 +160,7 @@ export default function Board() {
                 </div>
 
                 <DroppableColumn id={status}>
-                  <div>
+                  <div className="addtask__container">
                     <AddTaskForm
                       column={status}
                       onTaskCreated={(newTask) =>

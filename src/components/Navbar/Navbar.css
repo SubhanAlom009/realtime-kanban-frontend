@@ -173,12 +173,34 @@
   backdrop-filter: blur(3px);
 }
 
+/* Board button styling */
+.board-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(185, 131, 255, 0.12);
+  color: #6d4aff;
+  transition: all 0.3s ease;
+}
+
+.board-btn:hover {
+  background: rgba(185, 131, 255, 0.2);
+  transform: translateY(-2px);
+}
+
 /* Responsive design for mobile screens */
 @media (max-width: 768px) {
   .navbar__hamburger {
     display: flex; /* Show hamburger on mobile */
   }
+  .navbar__links {
+    gap: 10px;
+  }
 
+  .board-btn {
+    width: 100%;
+    margin-bottom: 5px;
+  }
   .navbar__links {
     position: fixed;
     top: 0;

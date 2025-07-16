@@ -5,7 +5,7 @@ import { SocketContext } from "../../context/SocketContext";
 
 export default function ActionLog() {
   const [logs, setLogs] = useState([]);
-  const [visible, setVisible] = useState(true); // Toggle state
+  const [visible, setVisible] = useState(false);
   const token = localStorage.getItem("token");
   const API = import.meta.env.VITE_API_BASE_URL;
 

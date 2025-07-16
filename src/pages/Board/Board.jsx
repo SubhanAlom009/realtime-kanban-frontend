@@ -46,9 +46,19 @@ export default function Board() {
     if (!over || active.id === over.id) return;
 
     try {
+      const currentTask = tasks.find((t) => t._id === active.id);
+      if (!currentTask) {
+        console.error("Task not found:", active.id);
+        return;
+      }
+      console.log("Moving task with timestamp:", currentTask.lastModified);
+
       const res = await axios.put(
         `${API}/api/tasks/${active.id}`,
-        { status: over.id },
+        {
+          status: over.id,
+          lastModified: currentTask.lastModified,
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -59,7 +69,13 @@ export default function Board() {
         );
       }
     } catch (err) {
-      console.error("DnD update failed:", err);
+      if (err.response?.status === 409) {
+        console.log("Conflict detected during drag and drop!");
+        // Handle conflict (maybe show toast notification)
+        // toast.error("Task was updated by someone else. Please refresh.");
+      } else {
+        console.error("DnD update failed:", err);
+      }
     }
   };
 
@@ -110,6 +126,15 @@ export default function Board() {
       socket.off("task_created");
       socket.off("task_updated");
       socket.off("task_deleted");
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    return () => {
+      socket.off("task_locked");
+      socket.off("task_unlocked");
     };
   }, [socket]);
 

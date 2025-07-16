@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./EditTaskModal.css";
 import axios from "axios";
+import ConflictPrompt from "./../ConflictPrompt/ConflictPrompt";
 
 export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
   const [title, setTitle] = useState("");
@@ -9,6 +10,8 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
   const [users, setUsers] = useState([]);
   const [assignedTo, setAssignedTo] = useState("");
   const [autoAssign, setAutoAssign] = useState(true);
+  const [conflict, setConflict] = useState(null);
+  const [lastModified, setLastModified] = useState(null);
 
   const API = import.meta.env.VITE_API_BASE_URL;
   const token = localStorage.getItem("token");
@@ -19,17 +22,42 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
       setDesc(task.description || "");
       setPriority(task.priority || "low");
       setAssignedTo(
-        typeof task.assignedTo === "object"
+        task.assignedTo && typeof task.assignedTo === "object"
           ? task.assignedTo._id
           : task.assignedTo || ""
       );
+      setLastModified(task.lastModified || new Date().toISOString());
     }
   }, [task]);
 
+  useEffect(() => {
+    if (!isOpen || !task) return;
+
+    // Lock the task when modal opens
+    axios
+      .put(`${API}/api/tasks/${task._id}/lock`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .catch((err) => {
+        console.error("Error locking task:", err);
+      });
+
+    // Unlock when modal closes (on cleanup)
+    return () => {
+      if (task && task._id) {
+        axios
+          .put(`${API}/api/tasks/${task._id}/unlock`, null, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .catch((err) => {
+            console.error("Error unlocking task:", err);
+          });
+      }
+    };
+  }, [isOpen, task, API, token]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("🛠️ Editing task:", task);
 
     try {
       const response = await axios.put(
@@ -38,7 +66,8 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
           title,
           description: desc,
           priority,
-          assignedTo: assignedTo || null,
+          assignedTo: autoAssign ? null : assignedTo,
+          lastModified, // ✅ Pass this for conflict detection
         },
         {
           headers: {
@@ -48,11 +77,19 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
       );
 
       if (response.status === 200) {
-        onUpdate(response.data.updatedTask); // pass updated task
-        onClose(); // close modal
+        onUpdate(response.data.updatedTask);
+        onClose();
       }
     } catch (err) {
-      console.error("Update failed:", err.response?.data || err.message);
+      if (err.response?.status === 409) {
+        // 🧠 Conflict detected
+        setConflict({
+          server: err.response.data.currentTask,
+          client: err.response.data.yourAttempt,
+        });
+      } else {
+        console.error("Update failed:", err.response?.data || err.message);
+      }
     }
   };
 
@@ -143,6 +180,37 @@ export default function EditTaskModal({ isOpen, onClose, task, onUpdate }) {
             </button>
           </div>
         </form>
+        {conflict && (
+          <ConflictPrompt
+            conflict={conflict}
+            onResolve={async (choice) => {
+              const chosen =
+                choice === "server" ? conflict.server : conflict.client;
+
+              try {
+                const response = await axios.put(
+                  `${API}/api/tasks/${task._id}`,
+                  {
+                    ...chosen,
+                    lastModified: conflict.server.lastModified, // Always use server's timestamp
+                  },
+                  {
+                    headers: { Authorization: `Bearer ${token}` },
+                  }
+                );
+
+                if (response.status === 200) {
+                  onUpdate(response.data.updatedTask);
+                  setConflict(null);
+                  onClose();
+                }
+              } catch (err) {
+                console.error("Conflict resolution failed:", err);
+              }
+            }}
+            onCancel={() => setConflict(null)}
+          />
+        )}
       </div>
     </div>
   );

@@ -99,6 +99,103 @@ Frontend displays a modal:
 
 ## 📞 Live Demo & Deployment
 
+🌐 **Live Demo**: [https://realtime-kanban.vercel.app](https://realtime-kanban.vercel.app)
+
+The application is deployed on Vercel (frontend) with the backend hosted on render.
+
+---
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- MongoDB (local or MongoDB Atlas)
+- Git
+
+### Repositories
+
+- **Backend**: [https://github.com/SubhanAlom009/realtime-kanban-backend.git](https://github.com/SubhanAlom009/realtime-kanban-backend.git)
+- **Frontend**: [https://github.com/SubhanAlom009/realtime-kanban-frontend.git](https://github.com/SubhanAlom009/realtime-kanban-frontend.git)
+
+### Backend Setup
+
+1. **Clone the backend repository**
+
+   ```bash
+   git clone https://github.com/SubhanAlom009/realtime-kanban-backend.git
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Environment Variables**
+
+   Create a `.env` file in the backend directory with the following variables:
+
+   ```env
+   MONGO_URI=
+   JWT_SECRET=
+   PORT=
+   NODE_ENV=
+   ```
+
+4. **Start the backend server**
+   ```bash
+   npm start
+   # or for development
+   npm run dev
+   ```
+
+### Frontend Setup
+
+1. **Clone the frontend repository**
+
+   ```bash
+   git clone https://github.com/SubhanAlom009/realtime-kanban-frontend.git
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Environment Variables**
+
+   Create a `.env` file in the frontend directory with:
+
+   ```env
+   VITE_API_BASE_URL=
+   ```
+
+4. **Start the frontend development server**
+
+   ```bash
+   npm run dev
+   ```
+
+5. **Build for production**
+   ```bash
+   npm run build
+   ```
+
+### Environment Variables Details
+
+#### Backend (.env)
+
+- `MONGO_URI`: MongoDB connection string
+- `JWT_SECRET`: Secret key for JWT token generation
+- `PORT`: Port number for the backend server
+- `NODE_ENV`: Environment mode (development/production)
+
+#### Frontend (.env)
+
+- `VITE_API_BASE_URL`: Backend API base URL (e.g., http://localhost:5000)
+
 ---
 
 ## 🙏 Acknowledgements

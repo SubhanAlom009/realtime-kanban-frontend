@@ -217,6 +217,25 @@
   max-width: 100px;
 }
 
+.taskcard__user-loading {
+  font-size: 0.75rem;
+  color: #b983ff;
+  font-style: italic;
+  animation: pulse-text 1.5s infinite;
+}
+
+@keyframes pulse-text {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
 /* Animation for card insertion */
 @keyframes cardInsert {
   from {
@@ -231,4 +250,54 @@
 
 .taskcard {
   animation: cardInsert 0.3s ease forwards;
+}
+
+@media (max-width: 768px) {
+  /* For the header actions that are next to the title */
+  .taskcard__header-actions {
+    opacity: 1; /* Always visible */
+    gap: 8px;
+  }
+
+  /* If you have any other action buttons in the card */
+  .taskcard__actions {
+    opacity: 1; /* Always visible */
+  }
+
+  /* Ensure even when dragging, the buttons stay visible on mobile */
+  .taskcard.is-dragging .taskcard__header-actions,
+  .taskcard.is-dragging .taskcard__actions {
+    opacity: 0.7; /* Slightly visible even when dragging */
+  }
+  /* Make the buttons larger for better touch targets */
+  .taskcard__edit,
+  .taskcard__delete,
+  .taskcard__drag {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Adjust the task card for better mobile dragging */
+  .taskcard {
+    touch-action: none; /* Prevents default touch actions that might interfere with dragging */
+  }
+
+  /* Fix for malfunction when dragging on mobile */
+  .taskcard.is-dragging {
+    z-index: 9999; /* Ensure it appears above all other elements */
+    pointer-events: none; /* Prevents touch events from being captured incorrectly */
+    transform: scale(1.03) translateZ(0); /* Force hardware acceleration */
+    will-change: transform; /* Hint to browser about animation */
+  }
+
+  /* Adjust title to accommodate larger buttons */
+  .taskcard__title {
+    font-size: 0.95rem;
+    padding-right: 10px;
+  }
+
+  /* Make the entire card more touch-friendly */
+  .taskcard__content {
+    padding: 14px 16px;
+  }
 }

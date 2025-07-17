@@ -202,4 +202,14 @@
   .column__tasks {
     max-height: 400px;
   }
+  .board__column {
+    min-height: 500px;
+    height: auto;
+  }
+
+  /* You might also want to adjust the column wrapper height for mobile */
+  .board__column-wrapper {
+    height: auto;
+    min-height: 400px; /* Should match the .board__column min-height */
+  }
 }

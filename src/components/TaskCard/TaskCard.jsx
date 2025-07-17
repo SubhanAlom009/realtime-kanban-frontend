@@ -145,7 +145,11 @@ export default function TaskCard({
                 </svg>
               </span>
               <span className="taskcard__username">
-                {assignedTo.username || assignedTo.email}
+                {typeof assignedTo === "object" && assignedTo.username
+                  ? assignedTo.username
+                  : typeof assignedTo === "string" && assignedTo.length > 0
+                  ? "Assigned" // Temporary text when we only have ID
+                  : "Unassigned"}
               </span>
             </div>
           )}

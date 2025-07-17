@@ -11,6 +11,7 @@ import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import EditTaskModal from "../../components/EditTaskModal/EditTaskModal";
 import DroppableColumn from "../../components/DroppableColumn/DroppableColumn";
 import ActionLog from "../../components/ActionLog/ActionLog";
+import { toast } from "react-toastify";
 
 export default function Board() {
   const API = import.meta.env.VITE_API_BASE_URL;
@@ -72,9 +73,10 @@ export default function Board() {
       if (err.response?.status === 409) {
         console.log("Conflict detected during drag and drop!");
         // Handle conflict (maybe show toast notification)
-        // toast.error("Task was updated by someone else. Please refresh.");
+        toast.error("Task was updated by someone else. Please refresh.");
       } else {
         console.error("DnD update failed:", err);
+        toast.error("Failed to update task during drag and drop");
       }
     }
   };
@@ -204,11 +206,28 @@ export default function Board() {
             onClose={() => setIsEditModalOpen(false)}
             task={taskToEdit}
             onUpdate={(updatedTask) => {
-              setTasks((prev) =>
-                prev.map((task) =>
-                  task._id === updatedTask._id ? updatedTask : task
-                )
-              );
+              // Fetch the full task data with populated fields after update
+              axios
+                .get(`${API}/api/tasks/${updatedTask._id}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => {
+                  // Update with fully populated data
+                  setTasks((prev) =>
+                    prev.map((task) =>
+                      task._id === response.data._id ? response.data : task
+                    )
+                  );
+                })
+                .catch((err) => {
+                  // If fetch fails, use the basic update
+                  setTasks((prev) =>
+                    prev.map((task) =>
+                      task._id === updatedTask._id ? updatedTask : task
+                    )
+                  );
+                  console.error("Error fetching updated task:", err);
+                });
             }}
           />
         </div>
